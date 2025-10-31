@@ -6,6 +6,7 @@ services:
     container_name: lpt-mosquitto
     ports:
       - "1883:1883"
+      - "9001:9001"  
     volumes:
       - ./mosquitto/config:/mosquitto/config
       - ./mosquitto/data:/mosquitto/data
@@ -18,28 +19,28 @@ services:
     restart: unless-stopped
 
   system-control:
-    build: ./python-app
-    container_name: python-system-control
+    build: ./system-control
+    container_name: system-control
     volumes:
       - .:/app
     depends_on:
       - lpt-mosquitto
     environment:
       - MQTT_BROKER=lpt-mosquitto
-    command: ["python", "app.py"]
+    command: ["python", "system-control.py"]
     networks:
       - leeds-pilot-testing-network
 
   io-simulator:
-    build: ./motion-interface
+    build: ./io-simulator
     container_name: io-simulator
     volumes:
-      - ./motion-interface:/app
+      - ./io-simulator:/app
     depends_on:
       - lpt-mosquitto
     environment:
       - MQTT_BROKER=lpt-mosquitto
-    command: ["python", "motion_interface.py"]
+    command: ["python", "io-simulator.py"]
     networks:
       - leeds-pilot-testing-network
 
@@ -47,7 +48,7 @@ services:
     image: nginx:alpine
     container_name: minimal-digital-twin
     volumes:
-      - ./web-frontend:/usr/share/nginx/html:ro
+      - ./minimal-digital-twin:/usr/share/nginx/html:ro
     ports:
       - "8080:80"
     depends_on:
