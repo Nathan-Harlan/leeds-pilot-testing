@@ -1,10 +1,13 @@
 {
   "name": "leeds-pilot-testing-dev",
-  "dockerComposeFile": [
-    "../docker-compose.yml"
-  ],
+  "dockerComposeFile": ["../docker-compose.yml"],
   "service": "system-control",
+  "runServices": ["lpt-mosquitto", "minimal-digital-twin", "system-control"],
   "workspaceFolder": "/app",
+  "remoteEnv": {
+    "MQTT_BROKER": "lpt-mosquitto"
+  },
+  "forwardPorts": [1883, 9001, 8080],
   "customizations": {
     "vscode": {
       "extensions": [
@@ -12,7 +15,11 @@
         "ms-python.vscode-pylance",
         "GitHub.copilot",
         "ms-azuretools.vscode-docker"
-      ]
+      ],
+      "settings": {
+        "python.analysis.typeCheckingMode": "basic",
+        "python.formatting.provider": "black"
+      }
     }
   },
   "postCreateCommand": "pip install -r system-control/requirements.txt",
