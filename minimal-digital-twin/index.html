@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Minimal Digital Twin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    html,body { margin:0; padding:0; overflow:hidden; background:#111; color:#eee; font-family:Arial, sans-serif; }
+    #status { position:fixed; top:4px; left:8px; background:#222; padding:4px 8px; font-size:12px; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <div id="status">Connecting...</div>
+  <!-- CDN scripts -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/paho-mqtt/paho-mqtt-min.js"></script>
+  <script src="main.js" type="module"></script>
+</body>
+</html>
