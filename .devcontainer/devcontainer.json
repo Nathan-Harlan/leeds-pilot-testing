@@ -14,13 +14,17 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "GitHub.copilot",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens"
       ],
       "settings": {
         "python.analysis.typeCheckingMode": "basic",
         "python.formatting.provider": "black"
       }
     }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
   },
   "postCreateCommand": "pip install -r system-control/requirements.txt",
   "remoteUser": "root"

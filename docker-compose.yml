@@ -27,7 +27,7 @@ services:
       - lpt-mosquitto
     environment:
       - MQTT_BROKER=lpt-mosquitto
-    command: ["python", "system-control.py"]
+    command: ["python", "system-control/system-control.py"]
     networks:
       - leeds-pilot-testing-network
 
