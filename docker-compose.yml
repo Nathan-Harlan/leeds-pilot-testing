@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  lpt-mosquitto:
+    image: eclipse-mosquitto
+    container_name: lpt-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=America/Los_Angeles
+    networks:
+      - leeds-pilot-testing-network
+    restart: unless-stopped
+
+  system-control:
+    build: ./python-app
+    container_name: python-system-control
+    volumes:
+      - .:/app
+    depends_on:
+      - lpt-mosquitto
+    environment:
+      - MQTT_BROKER=lpt-mosquitto
+    command: ["python", "app.py"]
+    networks:
+      - leeds-pilot-testing-network
+
+  io-simulator:
+    build: ./motion-interface
+    container_name: io-simulator
+    volumes:
+      - ./motion-interface:/app
+    depends_on:
+      - lpt-mosquitto
+    environment:
+      - MQTT_BROKER=lpt-mosquitto
+    command: ["python", "motion_interface.py"]
+    networks:
+      - leeds-pilot-testing-network
+
+  minimal-digital-twin:
+    image: nginx:alpine
+    container_name: minimal-digital-twin
+    volumes:
+      - ./web-frontend:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - lpt-mosquitto
+    networks:
+      - leeds-pilot-testing-network
+
+networks:
+  leeds-pilot-testing-network:
+    driver: bridge
